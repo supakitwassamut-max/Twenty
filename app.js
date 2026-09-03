@@ -1,6 +1,8 @@
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwDJ8kPLa-67Xlg9DcayHkCaOGaXRoSJafgEulXiOm1ZF8cZemKlQaSHwRm9cDrzh4N/exec";
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxOkU9l9T1uopLxnI_LhjS2s_Q0YfIUUVeGYEztyoYpG4tZ_xfLvJ6ewndfDKlayA7L/exec";
 
-let bikeData = [];
+let bikeData = []; // ประกาศตัวแปรเก็บข้อมูลรถทั้งหมด
+let currentSelectedBike = null; 
+let pendingRentalData = null; 
 
 // ฟังก์ชันโหลดข้อมูลจาก Google Sheets
 async function loadBikesFromSheet() {
@@ -45,6 +47,8 @@ const modalSeat = document.getElementById('modalSeat');
 const modalDecorations = document.getElementById('modalDecorations');
 const modalDown = document.getElementById('modalDown');
 const modalPrice = document.getElementById('modalPrice');
+const rentalWeeks = document.getElementById('rentalWeeks');
+const pickupLocation = document.getElementById('pickupLocation');
 
 // ฟังก์ชันเปลี่ยนหน้าเว็บ (Routing System)
 function switchPage(pageId) {
@@ -69,7 +73,7 @@ function switchPage(pageId) {
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// เปิดแสดงรายละเอียด Modal
+// เปิดแสดงรายละเอียด Modal พร้อมตั้งค่าราคาเริ่มต้น
 function openDetails(bikeId) {
     if (!bikeData || bikeData.length === 0) return;
 
@@ -80,16 +84,16 @@ function openDetails(bikeId) {
         return;
     }
 
+    currentSelectedBike = bike; 
+
     if (modalImg) modalImg.src = bike.img || '';
     if (modalBrand) modalBrand.innerText = bike.brand || '-';
     if (modalName) modalName.innerText = bike.name || '-';
     if (modalYear) modalYear.innerText = bike.year || '-';
     if (modalDown) modalDown.innerText = bike.down || '-';
     
-    const priceNum = Number(bike.price);
-    if (modalPrice) {
-        modalPrice.innerText = !isNaN(priceNum) ? `฿${priceNum.toLocaleString()}` : `฿0`;
-    }
+    if (rentalWeeks) rentalWeeks.value = "4";
+    calculateRentalPrice(); 
     
     if (modalDecorations) {
         modalDecorations.innerText = bike.decorations ? bike.decorations : "สภาพเดิมๆ โรงงาน";
@@ -115,10 +119,52 @@ function openDetails(bikeId) {
     document.body.style.overflow = 'hidden';
 }
 
+// คำนวณราคาเช่าตามจำนวนสัปดาห์
+function calculateRentalPrice() {
+    if (!currentSelectedBike) return;
+    
+    const basePrice = Number(currentSelectedBike.price) || 0; 
+    const weeklyRate = basePrice > 0 ? basePrice * 0.25 : 3500; 
+    const weeks = parseInt(rentalWeeks.value) || 1;
+    
+    let total = weeklyRate * weeks;
+    if (weeks >= 4) {
+        total = total * 0.9; 
+    }
+
+    if (modalPrice) {
+        modalPrice.innerText = `฿${Math.round(total).toLocaleString()}`;
+    }
+}
+
 function closeDetails() {
     if (detailModal) {
         detailModal.classList.remove('active');
         document.body.style.overflow = 'auto';
+    }
+}
+
+// พาผู้ใช้ไปหน้าติดต่อเราพร้อมเก็บข้อมูลรถไว้รอส่งแยกคอลัมน์
+function bookBikeRental() {
+    if (!currentSelectedBike) return;
+
+    const weeks = rentalWeeks.value;
+    const location = pickupLocation.value;
+    const priceText = modalPrice.innerText;
+
+    pendingRentalData = {
+        bikeInfo: `${currentSelectedBike.name} (ID: ${currentSelectedBike.id})`,
+        weeks: weeks + " สัปดาห์",
+        location: location,
+        totalPrice: priceText
+    };
+
+    closeDetails();
+    switchPage('contact');
+
+    const messageField = document.getElementById('contact-message');
+    if (messageField) {
+        messageField.value = `[แจ้งจองรถเช่า]\nรุ่น: ${currentSelectedBike.name}\nระยะเวลา: ${weeks} สัปดาห์\nจุดรับรถ: ${location}\nราคารวม: ${priceText}`;
     }
 }
 
@@ -128,7 +174,7 @@ function displayBikes(bikes) {
     if (bikeCount) bikeCount.innerText = bikes.length;
 
     if (bikes.length === 0) {
-        bikeGrid.innerHTML = `<p class="text-gray-400 col-span-full text-center py-12">❌ ไม่พบรถรุ่นที่ตรงกับเงื่อนไขของคุณ</p>`;
+        bikeGrid.innerHTML = `<p class="text-gray-400 col-span-full text-center py-12">❌ ไม่พบรถรุ่นที่ตรงกับเงื่อนไขของคุณ หรือยังไม่ได้ใส่ข้อมูลใน Google Sheets</p>`;
         return;
     }
 
@@ -151,11 +197,11 @@ function displayBikes(bikes) {
                 <div>
                     <span class="text-xs text-yellow-500 font-bold uppercase tracking-wide">${bike.brand} · ปี ${bike.year}</span>
                     <h3 class="text-base font-bold mt-1 text-white line-clamp-2 cursor-pointer hover:text-yellow-400 transition" onclick="openDetails('${bike.id}')">${bike.name}</h3>
-                    <div class="mt-2"><span class="text-xs text-gray-400">เงินดาวน์: <span class="text-white font-semibold">${bike.down}</span></span></div>
+                    <div class="mt-2"><span class="text-xs text-gray-400">เงินประกัน/ดาวน์: <span class="text-white font-semibold">${bike.down}</span></span></div>
                 </div>
                 <div class="mt-4 pt-3 border-t border-gray-700 flex justify-between items-center">
-                    <span class="text-xl font-black text-yellow-500">฿${priceDisplay}</span>
-                    <button onclick="openDetails('${bike.id}')" class="bg-yellow-500 text-black text-xs font-bold px-4 py-2 rounded hover:bg-yellow-400 transition">ดูรายละเอียด</button>
+                    <span class="text-lg font-black text-yellow-500">฿${priceDisplay} <span class="text-xs text-gray-400 font-normal">/เริ่มต้น</span></span>
+                    <button onclick="openDetails('${bike.id}')" class="bg-yellow-500 text-black text-xs font-bold px-4 py-2 rounded hover:bg-yellow-400 transition">เลือกเช่า/ดูเพิ่ม</button>
                 </div>
             </div>
         `;
@@ -187,7 +233,7 @@ if (resetBtn) {
     });
 }
 
-// ================= ฟังก์ชันส่งข้อมูลติดต่อเข้า Google Sheets =================
+// ================= ฟังก์ชันส่งข้อมูลติดต่อ / ส่งข้อมูลจองเข้า Google Sheets =================
 function handleContactSubmit(event) {
     event.preventDefault();
     
@@ -195,12 +241,27 @@ function handleContactSubmit(event) {
     const phone = document.getElementById('contact-phone').value;
     const message = document.getElementById('contact-message').value;
 
-    const formData = {
-        action: "contact",
-        name: name,
-        phone: phone,
-        message: message
-    };
+    let formData = {};
+
+    if (pendingRentalData) {
+        formData = {
+            action: "rental",
+            customerName: name,
+            phone: phone,
+            bikeInfo: pendingRentalData.bikeInfo,
+            weeks: pendingRentalData.weeks,
+            location: pendingRentalData.location,
+            totalPrice: pendingRentalData.totalPrice
+        };
+        pendingRentalData = null; 
+    } else {
+        formData = {
+            action: "contact",
+            name: name,
+            phone: phone,
+            message: message
+        };
+    }
 
     fetch(WEB_APP_URL, {
         method: 'POST',
@@ -209,12 +270,12 @@ function handleContactSubmit(event) {
         body: JSON.stringify(formData)
     })
     .then(() => {
-        alert('✅ ส่งข้อความสำเร็จแล้ว! เจ้าหน้าที่จะติดต่อกลับโดยเร็วที่สุด');
+        alert('✅ ส่งข้อมูลสำเร็จแล้ว!');
         document.getElementById('contactForm').reset();
     })
     .catch(error => {
         console.error('Error:', error);
-        alert('❌ เกิดข้อผิดพลาดในการส่งข้อความ');
+        alert('❌ เกิดข้อผิดพลาดในการส่งข้อมูล');
     });
 }
 

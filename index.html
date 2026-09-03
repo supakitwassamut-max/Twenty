@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TWENTY - ศูนย์รวมบิ๊กไบค์มือสอง</title>
+    <title>TWENTY - ศูนย์รวมบิ๊กไบค์มือสองและการเช่า</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
@@ -31,10 +31,10 @@
         <section class="hero-banner">
             <div class="text-center px-4">
                 <h1 class="text-4xl md:text-6xl font-black tracking-tight mb-4">
-                    ศูนย์รวม <span class="text-yellow-500">บิ๊กไบค์มือสอง</span> เกรดพรีเมียม
+                    ศูนย์รวม <span class="text-yellow-500">บิ๊กไบค์มือสองและการเช่า</span> เกรดพรีเมียม
                 </h1>
                 <p class="text-lg text-gray-300 max-w-2xl mx-auto mb-8">
-                    รถสวย สภาพดี เช็คประวัติได้ทุกคัน พร้อมบริการจัดไฟแนนซ์ทั่วประเทศ ดาวน์น้อย ผ่อนสบาย
+                    รถสวย สภาพดี เช็คประวัติได้ บริการเช่ารายสัปดาห์และจัดไฟแนนซ์ทั่วประเทศ
                 </p>
                 <button onclick="switchPage('bikes')" class="bg-yellow-500 text-black px-8 py-3 rounded-full font-bold text-lg hover:bg-yellow-400 shadow-lg shadow-yellow-500/20 transition duration-300">
                     เลือกชมรถทั้งหมด
@@ -54,10 +54,10 @@
                 </div>
                 <div class="bg-gray-800 p-8 rounded-2xl border border-gray-700 text-center">
                     <div class="w-16 h-16 bg-yellow-500/10 text-yellow-500 rounded-full flex items-center justify-center text-2xl mx-auto mb-6">
-                        <i class="fa-solid fa-percent"></i>
+                        <i class="fa-solid fa-calendar-days"></i>
                     </div>
-                    <h3 class="text-xl font-bold mb-3">ข้อเสนอสุดพิเศษ</h3>
-                    <p class="text-gray-400 text-sm leading-relaxed">ฟรีดาวน์ ออกรถง่าย เอกสารไม่ยุ่งยาก ดอกเบี้ยเริ่มต้นอัตราพิเศษ ผ่อนได้ยาวๆ</p>
+                    <h3 class="text-xl font-bold mb-3">บริการเช่ารายสัปดาห์</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">เลือกแพ็กเกจเช่าเป็นรายสัปดาห์ได้ง่ายๆ พร้อมกำหนดจุดรับรถได้ตามต้องการ</p>
                 </div>
                 <div class="bg-gray-800 p-8 rounded-2xl border border-gray-700 text-center">
                     <div class="w-16 h-16 bg-yellow-500/10 text-yellow-500 rounded-full flex items-center justify-center text-2xl mx-auto mb-6">
@@ -121,7 +121,7 @@
                 <div class="p-8 md:p-12 bg-gray-950 flex flex-col justify-between">
                     <div>
                         <h2 class="text-3xl font-black mb-4 text-yellow-500">ติดต่อเรา</h2>
-                        <p class="text-gray-400 text-sm mb-8">สนใจรถบิ๊กไบค์คันไหน หรือต้องการคำปรึกษาเรื่องการจัดไฟแนนซ์ สามารถติดต่อเราได้ตลอดเวลาครับ</p>
+                        <p class="text-gray-400 text-sm mb-8">สนใจเช่ารถรายสัปดาห์ ซื้อบิ๊กไบค์ หรือสอบถามเส้นทางรับรถ ติดต่อเราได้ตลอดเวลาครับ</p>
                         
                         <div class="space-y-4">
                             <div class="flex items-center space-x-4">
@@ -152,8 +152,8 @@
                             <input type="tel" id="contact-phone" required class="w-full bg-gray-900 border border-gray-700 rounded p-2 text-sm focus:outline-none focus:border-yellow-500 text-white">
                         </div>
                         <div>
-                            <label class="block text-xs uppercase text-gray-400 font-bold mb-1">ข้อความรายละเอียด</label>
-                            <textarea id="contact-message" rows="3" required class="w-full bg-gray-900 border border-gray-700 rounded p-2 text-sm focus:outline-none focus:border-yellow-500 text-white"></textarea>
+                            <label class="block text-xs uppercase text-gray-400 font-bold mb-1">ข้อความรายละเอียด / จองรถ</label>
+                            <textarea id="contact-message" rows="3" required placeholder="ระบุรุ่นรถ, จำนวนสัปดาห์ และสาขาที่ต้องการรับรถ" class="w-full bg-gray-900 border border-gray-700 rounded p-2 text-sm focus:outline-none focus:border-yellow-500 text-white"></textarea>
                         </div>
                         <button type="submit" class="w-full bg-yellow-500 text-black py-2 rounded font-bold hover:bg-yellow-400 transition">ส่งข้อความ</button>
                     </form>
@@ -171,7 +171,7 @@
                 <h2 class="text-3xl font-black text-yellow-500 tracking-wider">
                     <i class="fa-solid fa-motorcycle mr-2"></i>TWENTY LOGIN
                 </h2>
-                <p class="text-gray-400 text-xs mt-2">เข้าสู่ระบบเพื่อจัดการประวัติ บัญชีผู้ซื้อ หรือเข้าสู่ระบบหลังบ้าน</p>
+                <p class="text-gray-400 text-xs mt-2">เข้าสู่ระบบเพื่อจัดการประวัติ บัญชีผู้เช่าและผู้ซื้อ</p>
             </div>
 
             <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-5 relative z-10">
@@ -226,7 +226,7 @@
                 <h2 class="text-3xl font-black text-yellow-500 tracking-wider">
                     <i class="fa-solid fa-user-plus mr-2"></i>REGISTER
                 </h2>
-                <p class="text-gray-400 text-xs mt-2">สร้างบัญชีผู้ใช้ใหม่เพื่อรับสิทธิพิเศษและบันทึกประวัติการจองรถ</p>
+                <p class="text-gray-400 text-xs mt-2">สร้างบัญชีผู้ใช้ใหม่เพื่อรับสิทธิพิเศษและบันทึกประวัติการเช่ารถ</p>
             </div>
 
             <form id="registerForm" onsubmit="handleRegister(event)" class="space-y-4 relative z-10">
@@ -286,9 +286,9 @@
         </div>
     </div>
 
-    <!-- หน้าต่างแสดงรายละเอียดสินค้า Pop-up Modal -->
+    <!-- หน้าต่างแสดงรายละเอียดสินค้า Pop-up Modal (เพิ่มตัวเลือกเช่ารายสัปดาห์ & สถานที่รับรถ) -->
     <div id="detailModal" class="modal">
-        <div class="bg-gray-800 w-full max-w-2xl mx-4 rounded-2xl border border-gray-700 overflow-hidden shadow-2xl relative">
+        <div class="bg-gray-800 w-full max-w-2xl mx-4 rounded-2xl border border-gray-700 overflow-hidden shadow-2xl relative max-h-[90vh] overflow-y-auto">
             <button onclick="closeDetails()" class="absolute top-4 right-4 bg-black/60 hover:bg-black/90 text-white w-8 h-8 rounded-full flex items-center justify-center transition z-10">
                 <i class="fa-solid fa-xmark"></i>
             </button>
@@ -302,6 +302,33 @@
                     <span id="modalStatus" class="px-3 py-1 text-xs font-bold rounded-full text-white"></span>
                 </div>
                 <p class="text-sm text-gray-400 mb-4">ปีรถที่ผลิต: <span id="modalYear" class="text-white font-semibold"></span></p>
+
+                <!-- ส่วนกำหนดการเช่า: เลือกจำนวนสัปดาห์ และ สถานที่รับรถ -->
+                <div class="bg-gray-900 p-4 rounded-xl border border-gray-700 mb-4 space-y-3">
+                    <p class="text-yellow-500 font-bold text-xs uppercase flex items-center">
+                        <i class="fa-solid fa-calendar-week mr-1.5"></i> ตั้งค่าการเช่ารายสัปดาห์ & สถานที่รับรถ
+                    </p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs text-gray-400 mb-1">ระยะเวลาเช่า (สัปดาห์)</label>
+                            <select id="rentalWeeks" onchange="calculateRentalPrice()" class="w-full bg-gray-950 border border-gray-700 rounded p-2 text-sm text-white focus:outline-none focus:border-yellow-500">
+                                <option value="1">1 สัปดาห์</option>
+                                <option value="2">2 สัปดาห์</option>
+                                <option value="4" selected>1 เดือน (4 สัปดาห์ - ลดพิเศษ)</option>
+                                <option value="8">2 เดือน (8 สัปดาห์)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs text-gray-400 mb-1">สถานที่รับรถ</label>
+                            <select id="pickupLocation" class="w-full bg-gray-950 border border-gray-700 rounded p-2 text-sm text-white focus:outline-none focus:border-yellow-500">
+                                <option value="HQ Bangkok">สาขาใหญ่ กรุงเทพมหานคร</option>
+                                <option value="Lat Phrao">สาขาลาดพร้าว</option>
+                                <option value="Bang Na">สาขาบางนา</option>
+                                <option value="Delivery">บริการจัดส่งถึงที่ (มีค่าบริการเพิ่ม)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
 
                 <div class="grid grid-cols-2 md:grid-cols-3 gap-4 bg-gray-900 p-4 rounded-xl border border-gray-700 text-sm mb-4">
                     <div>
@@ -335,18 +362,18 @@
 
                 <div class="flex justify-between items-center bg-gray-950 p-4 rounded-xl border border-gray-700 mb-6">
                     <div>
-                        <p class="text-gray-400 text-xs">เงินดาวน์เริ่มต้น</p>
+                        <p class="text-gray-400 text-xs">เงินดาวน์ / ประกันรถเช่า</p>
                         <p id="modalDown" class="text-base font-bold text-yellow-500"></p>
                     </div>
                     <div class="text-right">
-                        <p class="text-gray-400 text-xs">ราคาจำหน่ายพิเศษ</p>
+                        <p class="text-gray-400 text-xs">ยอดรวมค่าเช่าตามระยะเวลา</p>
                         <p id="modalPrice" class="text-2xl font-black text-yellow-500"></p>
                     </div>
                 </div>
 
                 <div class="flex space-x-3">
-                    <button onclick="switchPage('contact'); closeDetails();" class="flex-1 bg-yellow-500 text-black py-3 rounded-lg font-bold hover:bg-yellow-400 transition flex items-center justify-center space-x-2">
-                        <i class="fa-solid fa-comment-dots"></i> <span>สอบถามข้อมูลหรือจองคันนี้</span>
+                    <button onclick="bookBikeRental();" class="flex-1 bg-yellow-500 text-black py-3 rounded-lg font-bold hover:bg-yellow-400 transition flex items-center justify-center space-x-2">
+                        <i class="fa-solid fa-calendar-check"></i> <span>ยืนยันการจองเช่ารถคันนี้</span>
                     </button>
                 </div>
             </div>

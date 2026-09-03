@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TWENTY - ศูนย์รวมบิ๊กไบค์มือสอง</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-gray-900 text-white font-sans">
+
+    <header class="bg-black border-b border-yellow-500 sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="text-2xl font-bold text-yellow-500 tracking-wider cursor-pointer" onclick="switchPage('home')">
+                <i class="fa-solid fa-motorcycle mr-2"></i>TWENTY
+            </div>
+            <nav class="hidden md:flex space-x-6 text-sm uppercase tracking-wide">
+                <button onclick="switchPage('home')" id="nav-home" class="nav-btn text-yellow-500 hover:text-yellow-400 font-semibold transition">หน้าแรก</button>
+                <button onclick="switchPage('bikes')" id="nav-bikes" class="nav-btn text-white hover:text-yellow-500 transition">บิ๊กไบค์ทั้งหมด</button>
+                <button onclick="switchPage('contact')" id="nav-contact" class="nav-btn text-white hover:text-yellow-500 transition">ติดต่อเรา</button>
+                <button onclick="switchPage('login')" id="nav-login" class="nav-btn text-white hover:text-yellow-500 transition flex items-center">
+                    <i class="fa-solid fa-user-lock mr-1.5"></i> เข้าสู่ระบบ
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- หน้าแรก (Home Page) -->
+    <div id="page-home" class="page-content">
+        <section class="hero-banner">
+            <div class="text-center px-4">
+                <h1 class="text-4xl md:text-6xl font-black tracking-tight mb-4">
+                    ศูนย์รวม <span class="text-yellow-500">บิ๊กไบค์มือสอง</span> เกรดพรีเมียม
+                </h1>
+                <p class="text-lg text-gray-300 max-w-2xl mx-auto mb-8">
+                    รถสวย สภาพดี เช็คประวัติได้ทุกคัน พร้อมบริการจัดไฟแนนซ์ทั่วประเทศ ดาวน์น้อย ผ่อนสบาย
+                </p>
+                <button onclick="switchPage('bikes')" class="bg-yellow-500 text-black px-8 py-3 rounded-full font-bold text-lg hover:bg-yellow-400 shadow-lg shadow-yellow-500/20 transition duration-300">
+                    เลือกชมรถทั้งหมด
+                </button>
+            </div>
+        </section>
+
+        <section class="container mx-auto px-4 py-16">
+            <h2 class="text-3xl font-black text-center mb-12">ทำไมต้องเลือก <span class="text-yellow-500">TWENTY</span></h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-gray-800 p-8 rounded-2xl border border-gray-700 text-center">
+                    <div class="w-16 h-16 bg-yellow-500/10 text-yellow-500 rounded-full flex items-center justify-center text-2xl mx-auto mb-6">
+                        <i class="fa-solid fa-shield-halved"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">รับประกันสภาพรถ</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">รถทุกคันผ่านการตรวจเช็คสภาพกว่า 50 จุด ไม่มีชนหนัก ไม่มีกรอไมล์ มั่นใจได้ 100%</p>
+                </div>
+                <div class="bg-gray-800 p-8 rounded-2xl border border-gray-700 text-center">
+                    <div class="w-16 h-16 bg-yellow-500/10 text-yellow-500 rounded-full flex items-center justify-center text-2xl mx-auto mb-6">
+                        <i class="fa-solid fa-percent"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">ข้อเสนอสุดพิเศษ</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">ฟรีดาวน์ ออกรถง่าย เอกสารไม่ยุ่งยาก ดอกเบี้ยเริ่มต้นอัตราพิเศษ ผ่อนได้ยาวๆ</p>
+                </div>
+                <div class="bg-gray-800 p-8 rounded-2xl border border-gray-700 text-center">
+                    <div class="w-16 h-16 bg-yellow-500/10 text-yellow-500 rounded-full flex items-center justify-center text-2xl mx-auto mb-6">
+                        <i class="fa-solid fa-wrench"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">บริการหลังการขาย</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">เราดูแลคุณตลอดการใช้งาน ด้วยทีมช่างผู้เชี่ยวชาญ และบริการให้คำปรึกษาฟรี</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- หน้าสินค้า (Bikes Page) -->
+    <div id="page-bikes" class="page-content hidden container mx-auto px-4 py-8">
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+            <aside class="bg-gray-800 p-6 rounded-2xl border border-gray-700 h-fit">
+                <h3 class="text-lg font-bold mb-4 flex items-center text-yellow-500">
+                    <i class="fa-solid fa-sliders mr-2"></i> ค้นหาและกรองข้อมูล
+                </h3>
+                
+                <div class="mb-5">
+                    <label class="block text-sm font-semibold mb-2 text-gray-300">แบรนด์/ยี่ห้อรถ</label>
+                    <select id="brandFilter" class="w-full bg-gray-950 border border-gray-700 rounded p-2 text-sm focus:outline-none focus:border-yellow-500">
+                        <option value="all">ทั้งหมด</option>
+                        <option value="Honda">HONDA</option>
+                        <option value="Kawasaki">KAWASAKI</option>
+                        <option value="Ducati">DUCATI</option>
+                        <option value="Yamaha">YAMAHA</option>
+                    </select>
+                </div>
+
+                <div class="mb-5">
+                    <label class="block text-sm font-semibold mb-2 text-gray-300">ช่วงราคารถ (บาท)</label>
+                    <select id="priceFilter" class="w-full bg-gray-950 border border-gray-700 rounded p-2 text-sm focus:outline-none focus:border-yellow-500">
+                        <option value="all">ทั้งหมด</option>
+                        <option value="under200k">ไม่เกิน 200,000</option>
+                        <option value="over200k">200,001 ขึ้นไป</option>
+                    </select>
+                </div>
+
+                <button id="resetBtn" class="w-full bg-gray-700 text-white text-sm py-2 rounded font-semibold hover:bg-gray-600 transition">
+                    ล้างตัวกรองทั้งหมด
+                </button>
+            </aside>
+
+            <section class="lg:col-span-3">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-xl font-bold">บิ๊กไบค์ทั้งหมด (<span id="bikeCount">0</span> คัน)</h2>
+                </div>
+
+                <div id="bikeGrid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- หน้าติดต่อเรา (Contact Page) -->
+    <div id="page-contact" class="page-content hidden container mx-auto px-4 py-12">
+        <section class="max-w-4xl mx-auto bg-gray-800 rounded-2xl border border-gray-700 overflow-hidden shadow-2xl">
+            <div class="grid grid-cols-1 md:grid-cols-2">
+                <div class="p-8 md:p-12 bg-gray-950 flex flex-col justify-between">
+                    <div>
+                        <h2 class="text-3xl font-black mb-4 text-yellow-500">ติดต่อเรา</h2>
+                        <p class="text-gray-400 text-sm mb-8">สนใจรถบิ๊กไบค์คันไหน หรือต้องการคำปรึกษาเรื่องการจัดไฟแนนซ์ สามารถติดต่อเราได้ตลอดเวลาครับ</p>
+                        
+                        <div class="space-y-4">
+                            <div class="flex items-center space-x-4">
+                                <div class="w-10 h-10 bg-gray-900 border border-gray-700 text-yellow-500 rounded-lg flex items-center justify-center"><i class="fa-solid fa-phone"></i></div>
+                                <div><p class="text-xs text-gray-500 font-bold">เบอร์โทรศัพท์</p><p class="text-sm font-semibold">063-659-9206</p></div>
+                            </div>
+                            <div class="flex items-center space-x-4">
+                                <div class="w-10 h-10 bg-gray-900 border border-gray-700 text-yellow-500 rounded-lg flex items-center justify-center"><i class="fa-solid fa-envelope"></i></div>
+                                <div><p class="text-xs text-gray-500 font-bold">อีเมล</p><p class="text-sm font-semibold">supakitwassamut@gmail.com</p></div>
+                            </div>
+                            <div class="flex items-center space-x-4">
+                                <div class="w-10 h-10 bg-gray-900 border border-gray-700 text-yellow-500 rounded-lg flex items-center justify-center"><i class="fa-solid fa-location-dot"></i></div>
+                                <div><p class="text-xs text-gray-500 font-bold">ที่ตั้งร้าน</p><p class="text-sm font-semibold">กรุงเทพมหานคร,ประเทศไทย</p></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-8 md:p-12">
+                    <h3 class="text-xl font-bold mb-6 text-white">ส่งข้อความหาเรา</h3>
+                    <form id="contactForm" class="space-y-4" onsubmit="handleContactSubmit(event)">
+                        <div>
+                            <label class="block text-xs uppercase text-gray-400 font-bold mb-1">ชื่อของคุณ</label>
+                            <input type="text" id="contact-name" required class="w-full bg-gray-900 border border-gray-700 rounded p-2 text-sm focus:outline-none focus:border-yellow-500 text-white">
+                        </div>
+                        <div>
+                            <label class="block text-xs uppercase text-gray-400 font-bold mb-1">เบอร์โทรติดต่อ</label>
+                            <input type="tel" id="contact-phone" required class="w-full bg-gray-900 border border-gray-700 rounded p-2 text-sm focus:outline-none focus:border-yellow-500 text-white">
+                        </div>
+                        <div>
+                            <label class="block text-xs uppercase text-gray-400 font-bold mb-1">ข้อความรายละเอียด</label>
+                            <textarea id="contact-message" rows="3" required class="w-full bg-gray-900 border border-gray-700 rounded p-2 text-sm focus:outline-none focus:border-yellow-500 text-white"></textarea>
+                        </div>
+                        <button type="submit" class="w-full bg-yellow-500 text-black py-2 rounded font-bold hover:bg-yellow-400 transition">ส่งข้อความ</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- หน้าเข้าสู่ระบบ (Login Page) -->
+    <div id="page-login" class="page-content hidden min-h-[75vh] flex items-center justify-center px-4 py-12">
+        <div class="bg-gray-800 border border-gray-700 p-8 rounded-2xl w-full max-w-md shadow-2xl relative overflow-hidden">
+            <div class="absolute -top-10 -right-10 w-32 h-32 bg-yellow-500 opacity-10 rounded-full blur-2xl"></div>
+            
+            <div class="text-center mb-8 relative z-10">
+                <h2 class="text-3xl font-black text-yellow-500 tracking-wider">
+                    <i class="fa-solid fa-motorcycle mr-2"></i>TWENTY LOGIN
+                </h2>
+                <p class="text-gray-400 text-xs mt-2">เข้าสู่ระบบเพื่อจัดการประวัติ บัญชีผู้ซื้อ หรือเข้าสู่ระบบหลังบ้าน</p>
+            </div>
+
+            <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-5 relative z-10">
+                <div>
+                    <label class="block text-xs uppercase text-gray-400 font-bold mb-2">ชื่อผู้ใช้ หรือ อีเมล</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
+                            <i class="fa-solid fa-user text-xs"></i>
+                        </span>
+                        <input type="text" id="username" required placeholder="username หรือ email" 
+                            class="w-full bg-gray-900 border border-gray-700 rounded-lg p-3 pl-10 text-sm text-white focus:outline-none focus:border-yellow-500 transition duration-200">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs uppercase text-gray-400 font-bold mb-2">รหัสผ่าน</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
+                            <i class="fa-solid fa-lock text-xs"></i>
+                        </span>
+                        <input type="password" id="password" required placeholder="••••••••" 
+                            class="w-full bg-gray-900 border border-gray-700 rounded-lg p-3 pl-10 text-sm text-white focus:outline-none focus:border-yellow-500 transition duration-200">
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between text-xs text-gray-400">
+                    <label class="flex items-center cursor-pointer select-none">
+                        <input type="checkbox" class="rounded bg-gray-900 border-gray-700 text-yellow-500 focus:ring-yellow-500 mr-2">
+                        จดจำฉันไว้
+                    </label>
+                    <a href="#" class="hover:text-yellow-500 transition" onclick="event.preventDefault(); alert('ระบบจะส่งลิงก์รีเซ็ตรหัสผ่านไปยังอีเมลของคุณ');">ลืมรหัสผ่าน?</a>
+                </div>
+
+                <button type="submit" class="w-full bg-yellow-500 text-black py-3 rounded-lg font-bold hover:bg-yellow-400 transition duration-200 flex items-center justify-center space-x-2">
+                    <i class="fa-solid fa-right-to-bracket"></i>
+                    <span>เข้าสู่ระบบ</span>
+                </button>
+            </form>
+
+            <div class="mt-6 text-center text-xs text-gray-500 relative z-10 border-t border-gray-700 pt-4">
+                ยังไม่มีบัญชีผู้ใช้? <a href="#" class="text-yellow-500 hover:underline font-semibold ml-1" onclick="event.preventDefault(); switchPage('register');">สมัครสมาชิกใหม่</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- หน้าสมัครสมาชิกใหม่ (Register Page) -->
+    <div id="page-register" class="page-content hidden min-h-[75vh] flex items-center justify-center px-4 py-12">
+        <div class="bg-gray-800 border border-gray-700 p-8 rounded-2xl w-full max-w-md shadow-2xl relative overflow-hidden">
+            <div class="absolute -top-10 -right-10 w-32 h-32 bg-yellow-500 opacity-10 rounded-full blur-2xl"></div>
+            
+            <div class="text-center mb-6 relative z-10">
+                <h2 class="text-3xl font-black text-yellow-500 tracking-wider">
+                    <i class="fa-solid fa-user-plus mr-2"></i>REGISTER
+                </h2>
+                <p class="text-gray-400 text-xs mt-2">สร้างบัญชีผู้ใช้ใหม่เพื่อรับสิทธิพิเศษและบันทึกประวัติการจองรถ</p>
+            </div>
+
+            <form id="registerForm" onsubmit="handleRegister(event)" class="space-y-4 relative z-10">
+                <div>
+                    <label class="block text-xs uppercase text-gray-400 font-bold mb-1.5">ชื่อผู้ใช้ (Username)</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
+                            <i class="fa-solid fa-user text-xs"></i>
+                        </span>
+                        <input type="text" id="reg-username" required placeholder="เช่น boy_bigbike" 
+                            class="w-full bg-gray-900 border border-gray-700 rounded-lg p-2.5 pl-10 text-sm text-white focus:outline-none focus:border-yellow-500 transition duration-200">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs uppercase text-gray-400 font-bold mb-1.5">อีเมล (Email)</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
+                            <i class="fa-solid fa-envelope text-xs"></i>
+                        </span>
+                        <input type="email" id="reg-email" required placeholder="example@email.com" 
+                            class="w-full bg-gray-900 border border-gray-700 rounded-lg p-2.5 pl-10 text-sm text-white focus:outline-none focus:border-yellow-500 transition duration-200">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs uppercase text-gray-400 font-bold mb-1.5">รหัสผ่าน (Password)</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
+                            <i class="fa-solid fa-lock text-xs"></i>
+                        </span>
+                        <input type="password" id="reg-password" required placeholder="อย่างน้อย 6 ตัวอักษร" 
+                            class="w-full bg-gray-900 border border-gray-700 rounded-lg p-2.5 pl-10 text-sm text-white focus:outline-none focus:border-yellow-500 transition duration-200">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs uppercase text-gray-400 font-bold mb-1.5">ยืนยันรหัสผ่าน (Confirm Password)</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
+                            <i class="fa-solid fa-lock-open text-xs"></i>
+                        </span>
+                        <input type="password" id="reg-confirm-password" required placeholder="••••••••" 
+                            class="w-full bg-gray-900 border border-gray-700 rounded-lg p-2.5 pl-10 text-sm text-white focus:outline-none focus:border-yellow-500 transition duration-200">
+                    </div>
+                </div>
+
+                <button type="submit" class="w-full bg-yellow-500 text-black py-3 rounded-lg font-bold hover:bg-yellow-400 transition duration-200 flex items-center justify-center space-x-2 mt-2">
+                    <i class="fa-solid fa-user-check"></i>
+                    <span>ยืนยันการสมัครสมาชิก</span>
+                </button>
+            </form>
+
+            <div class="mt-6 text-center text-xs text-gray-500 relative z-10 border-t border-gray-700 pt-4">
+                มีบัญชีผู้ใช้อยู่แล้ว? <a href="#" class="text-yellow-500 hover:underline font-semibold ml-1" onclick="event.preventDefault(); switchPage('login');">เข้าสู่ระบบเลย</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- หน้าต่างแสดงรายละเอียดสินค้า Pop-up Modal -->
+    <div id="detailModal" class="modal">
+        <div class="bg-gray-800 w-full max-w-2xl mx-4 rounded-2xl border border-gray-700 overflow-hidden shadow-2xl relative">
+            <button onclick="closeDetails()" class="absolute top-4 right-4 bg-black/60 hover:bg-black/90 text-white w-8 h-8 rounded-full flex items-center justify-center transition z-10">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <img id="modalImg" src="" alt="" class="w-full h-64 object-cover border-b border-gray-700">
+            <div class="p-6">
+                <div class="flex justify-between items-start mb-2">
+                    <div>
+                        <span id="modalBrand" class="text-xs font-bold uppercase tracking-wider text-yellow-500 bg-yellow-500/10 px-2.5 py-1 rounded"></span>
+                        <h2 id="modalName" class="text-xl font-black text-white mt-2"></h2>
+                    </div>
+                    <span id="modalStatus" class="px-3 py-1 text-xs font-bold rounded-full text-white"></span>
+                </div>
+                <p class="text-sm text-gray-400 mb-4">ปีรถที่ผลิต: <span id="modalYear" class="text-white font-semibold"></span></p>
+
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-4 bg-gray-900 p-4 rounded-xl border border-gray-700 text-sm mb-4">
+                    <div>
+                        <p class="text-gray-400 text-xs uppercase">ความจุเครื่องยนต์</p>
+                        <p id="modalEngine" class="font-bold text-white"></p>
+                    </div>
+                    <div>
+                        <p class="text-gray-400 text-xs uppercase">กำลังแรงม้าสูงสุด</p>
+                        <p id="modalHP" class="font-bold text-white"></p>
+                    </div>
+                    <div>
+                        <p class="text-gray-400 text-xs uppercase">แรงบิดสูงสุด</p>
+                        <p id="modalTorque" class="font-bold text-white"></p>
+                    </div>
+                    <div>
+                        <p class="text-gray-400 text-xs uppercase">น้ำหนักตัวรถ</p>
+                        <p id="modalWeight" class="font-bold text-white"></p>
+                    </div>
+                    <div>
+                        <p class="text-gray-400 text-xs uppercase">ความสูงเบาะนั่ง</p>
+                        <p id="modalSeat" class="font-bold text-white"></p>
+                    </div>
+                </div>
+
+                <div class="mb-4 bg-gray-900 p-4 rounded-xl border border-gray-700 text-sm">
+                    <p class="text-yellow-500 font-bold text-xs uppercase mb-1">
+                        <i class="fa-solid fa-screwdriver-wrench mr-1"></i> รายการของแต่งติดตั้งเพิ่ม:
+                    </p>
+                    <p id="modalDecorations" class="text-gray-300 text-xs leading-relaxed"></p>
+                </div>
+
+                <div class="flex justify-between items-center bg-gray-950 p-4 rounded-xl border border-gray-700 mb-6">
+                    <div>
+                        <p class="text-gray-400 text-xs">เงินดาวน์เริ่มต้น</p>
+                        <p id="modalDown" class="text-base font-bold text-yellow-500"></p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-gray-400 text-xs">ราคาจำหน่ายพิเศษ</p>
+                        <p id="modalPrice" class="text-2xl font-black text-yellow-500"></p>
+                    </div>
+                </div>
+
+                <div class="flex space-x-3">
+                    <button onclick="switchPage('contact'); closeDetails();" class="flex-1 bg-yellow-500 text-black py-3 rounded-lg font-bold hover:bg-yellow-400 transition flex items-center justify-center space-x-2">
+                        <i class="fa-solid fa-comment-dots"></i> <span>สอบถามข้อมูลหรือจองคันนี้</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-black text-gray-500 text-center py-6 text-sm border-t border-gray-800 mt-12">
+        <p>© 2026 TWENTY BIGBIKE. All rights reserved.</p>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>

@@ -1,8 +1,15 @@
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxOkU9l9T1uopLxnI_LhjS2s_Q0YfIUUVeGYEztyoYpG4tZ_xfLvJ6ewndfDKlayA7L/exec";
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwtvbez6xm5RxA6gxoDV_m-IIQJa_dgQcUV9QASA-9EH0ViIoSeE5RMadyCMomsAD2P/exec";
 
 let bikeData = []; // ประกาศตัวแปรเก็บข้อมูลรถทั้งหมด
 let currentSelectedBike = null; 
 let pendingRentalData = null; 
+let currentUser = null; // เก็บข้อมูลผู้ใช้ที่ล็อกอินอยู่ (ต้องล็อกอินก่อนถึงจะจองรถได้)
+
+// โหลดสถานะการล็อกอินที่ค้างไว้จาก sessionStorage (ถ้ามี ผู้ใช้จะไม่ต้องล็อกอินซ้ำเมื่อรีเฟรชหน้า)
+(function restoreSession() {
+    const saved = sessionStorage.getItem('twentyUser');
+    if (saved) currentUser = saved;
+})();
 
 // ฟังก์ชันโหลดข้อมูลจาก Google Sheets
 async function loadBikesFromSheet() {
@@ -73,6 +80,33 @@ function switchPage(pageId) {
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
+// ปรับปุ่ม "เข้าสู่ระบบ" บน nav ให้แสดงชื่อผู้ใช้เมื่อล็อกอินอยู่
+function updateAuthUI() {
+    const navAuthText = document.getElementById('navAuthText');
+    if (!navAuthText) return;
+    navAuthText.innerText = currentUser ? currentUser : 'เข้าสู่ระบบ';
+}
+
+// กดปุ่มบน nav: ถ้ายังไม่ล็อกอิน ให้ไปหน้าล็อกอิน / ถ้าล็อกอินอยู่แล้ว ให้ถามออกจากระบบ
+function handleNavAuthClick() {
+    if (currentUser) {
+        if (confirm(`ออกจากระบบบัญชี "${currentUser}" หรือไม่?`)) {
+            handleLogout();
+        }
+    } else {
+        switchPage('login');
+    }
+}
+
+function handleLogout() {
+    currentUser = null;
+    sessionStorage.removeItem('twentyUser');
+    updateAuthUI();
+    switchPage('home');
+}
+
+updateAuthUI(); // อัปเดต UI ตามสถานะที่โหลดมาตอนเปิดหน้าเว็บ
+
 // เปิดแสดงรายละเอียด Modal พร้อมตั้งค่าราคาเริ่มต้น
 function openDetails(bikeId) {
     if (!bikeData || bikeData.length === 0) return;
@@ -102,10 +136,18 @@ function openDetails(bikeId) {
     if (modalStatus) {
         modalStatus.innerText = bike.status || 'ว่าง';
         modalStatus.className = "px-3 py-1 text-xs font-bold rounded-full text-white";
-        if (bike.status === "ว่าง") modalStatus.classList.add("bg-green-600");
-        else if (bike.status === "ติดจอง") modalStatus.classList.add("bg-orange-500");
-        else if (bike.status === "ขายแล้ว") modalStatus.classList.add("bg-red-600");
-        else modalStatus.classList.add("bg-green-600");
+        
+        if (bike.status === "ว่าง") {
+            modalStatus.classList.add("bg-green-600");
+        } else if (bike.status === "ไม่ว่าง") {
+            modalStatus.classList.add("bg-gray-600"); 
+        } else if (bike.status === "ติดจอง") {
+            modalStatus.classList.add("bg-orange-500");
+        } else if (bike.status === "ขายแล้ว") {
+            modalStatus.classList.add("bg-red-600");
+        } else {
+            modalStatus.classList.add("bg-green-600");
+        }
     }
 
     const specs = bike.specs || {};
@@ -144,9 +186,17 @@ function closeDetails() {
     }
 }
 
-// พาผู้ใช้ไปหน้าติดต่อเราพร้อมเก็บข้อมูลรถไว้รอส่งแยกคอลัมน์
+// พาผู้ใช้ไปหน้าติดต่อเราพร้อมเก็บข้อมูลรถไว้รอส่ง (ต้องล็อกอินก่อนเท่านั้น)
 function bookBikeRental() {
     if (!currentSelectedBike) return;
+
+    // ต้องเข้าสู่ระบบก่อนถึงจะจองรถได้
+    if (!currentUser) {
+        alert('กรุณาเข้าสู่ระบบสมาชิกก่อนทำการจองรถ');
+        closeDetails();
+        switchPage('login');
+        return;
+    }
 
     const weeks = rentalWeeks.value;
     const location = pickupLocation.value;
@@ -161,6 +211,9 @@ function bookBikeRental() {
 
     closeDetails();
     switchPage('contact');
+
+    const nameField = document.getElementById('contact-name');
+    if (nameField && !nameField.value) nameField.value = currentUser;
 
     const messageField = document.getElementById('contact-message');
     if (messageField) {
@@ -233,8 +286,8 @@ if (resetBtn) {
     });
 }
 
-// ================= ฟังก์ชันส่งข้อมูลติดต่อ / ส่งข้อมูลจองเข้า Google Sheets =================
-function handleContactSubmit(event) {
+// ================= ฟังก์ชันส่งข้อมูลติดต่อเข้า Google Sheets =================
+async function handleContactSubmit(event) {
     event.preventDefault();
     
     const name = document.getElementById('contact-name').value;
@@ -242,6 +295,13 @@ function handleContactSubmit(event) {
     const message = document.getElementById('contact-message').value;
 
     let formData = {};
+
+    if (pendingRentalData && !currentUser) {
+        alert('เซสชันเข้าสู่ระบบหมดอายุ กรุณาเข้าสู่ระบบใหม่ก่อนยืนยันการจอง');
+        pendingRentalData = null;
+        switchPage('login');
+        return;
+    }
 
     if (pendingRentalData) {
         formData = {
@@ -263,19 +323,28 @@ function handleContactSubmit(event) {
         };
     }
 
+    alert('⏳ กำลังส่งข้อมูล กรุณารอสักครู่...');
+
+    // หมายเหตุ: ใช้ Content-Type: text/plain เพื่อเลี่ยง CORS preflight ที่ Apps Script รับไม่ได้
+    // และไม่ใช้ mode: 'no-cors' เพื่อให้เห็น response จริงจาก server (debug ง่ายขึ้น)
     fetch(WEB_APP_URL, {
         method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
         body: JSON.stringify(formData)
     })
-    .then(() => {
-        alert('✅ ส่งข้อมูลสำเร็จแล้ว!');
-        document.getElementById('contactForm').reset();
+    .then(response => response.json())
+    .then(result => {
+        console.log('Server response:', result);
+        if (result.result === 'success') {
+            alert('✅ ส่งข้อมูลสำเร็จแล้ว!');
+            document.getElementById('contactForm').reset();
+        } else {
+            alert('❌ เกิดข้อผิดพลาดจาก server: ' + (result.message || 'ไม่ทราบสาเหตุ'));
+        }
     })
     .catch(error => {
         console.error('Error:', error);
-        alert('❌ เกิดข้อผิดพลาดในการส่งข้อมูล');
+        alert('❌ เกิดข้อผิดพลาดในการส่งข้อมูล: ' + error.message);
     });
 }
 
@@ -301,23 +370,60 @@ function handleRegister(event) {
 
     fetch(WEB_APP_URL, {
         method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
         body: JSON.stringify(formData)
     })
-    .then(() => {
-        alert(`🎉 สมัครสมาชิกสำเร็จ! ยินดีต้อนรับคุณ ${username}`);
-        document.getElementById('registerForm').reset();
-        switchPage('login');
+    .then(response => response.json())
+    .then(result => {
+        console.log('Server response:', result);
+        if (result.result === 'success') {
+            alert(`🎉 สมัครสมาชิกสำเร็จ! ยินดีต้อนรับคุณ ${username}`);
+            document.getElementById('registerForm').reset();
+            switchPage('login');
+        } else {
+            alert('❌ เกิดข้อผิดพลาดจาก server: ' + (result.message || 'ไม่ทราบสาเหตุ'));
+        }
     })
     .catch(error => {
         console.error('Error:', error);
-        alert('❌ เกิดข้อผิดพลาดในการสมัครสมาชิก');
+        alert('❌ เกิดข้อผิดพลาดในการสมัครสมาชิก: ' + error.message);
     });
 }
 
+// ================= ฟังก์ชันเข้าสู่ระบบ (ตรวจสอบจริงกับ Google Sheet) =================
 function handleLogin(event) {
     event.preventDefault();
-    alert("เข้าสู่ระบบสำเร็จ!");
-    switchPage('home');
+
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+
+    const formData = {
+        action: "login",
+        username: username,
+        password: password
+    };
+
+    fetch(WEB_APP_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(formData)
+    })
+    .then(response => response.json())
+    .then(result => {
+        console.log('Server response:', result);
+        if (result.result === 'success') {
+            currentUser = result.username || username;
+            sessionStorage.setItem('twentyUser', currentUser);
+            updateAuthUI();
+            document.getElementById('loginForm').reset();
+            alert(`✅ เข้าสู่ระบบสำเร็จ! ยินดีต้อนรับคุณ ${currentUser}`);
+            switchPage('home');
+        } else {
+            alert('❌ ' + (result.message || 'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง'));
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('❌ เกิดข้อผิดพลาดในการเข้าสู่ระบบ: ' + error.message);
+    });
 }
